@@ -1,0 +1,6 @@
+source 'https://rubygems.org'
+gem 'mongo', '= 2.1'
+gem 'uri'
+gem 'json'
+gem 'rethinkdb', '>= 2.2'
+gem 'openssl', '>= 0.2'
