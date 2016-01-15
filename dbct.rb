@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-# gem install mongo bson_ext json
 #require 'rubygems'  # if less than Ruby 1.9
 packages = ['mongo','uri','json','optparse','ostruct','openssl','rethinkdb']
 packages.each { |x| require x }

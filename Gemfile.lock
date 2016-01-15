@@ -5,6 +5,9 @@ GEM
     json (1.8.3)
     mongo (2.1.0)
       bson (~> 3.0)
+    openssl (0.2.0)
+    rethinkdb (2.2.0.2)
+      json
     uri (4.4.29)
 
 PLATFORMS
@@ -13,7 +16,9 @@ PLATFORMS
 DEPENDENCIES
   json
   mongo (= 2.1)
+  openssl (>= 0.2)
+  rethinkdb (>= 2.2)
   uri
 
 BUNDLED WITH
-   1.10.6
+   1.11.0
