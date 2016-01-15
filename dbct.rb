@@ -1,15 +1,17 @@
 #!/usr/bin/env ruby
 #require 'rubygems'  # if less than Ruby 1.9
-packages = ['mongo','uri','json','optparse','ostruct','openssl','rethinkdb']
+
+#require the packages needed for the application. Stored in an Array to make things a little prettier!
+packages = ['mongo','uri','json','optparse','ostruct','openssl','rethinkdb','redis']
 packages.each { |x| require x }
 
-include Mongo
-
+#OptionParser to handle the available options.
 options = OpenStruct.new
 OptionParser.new do |opt|
   opt.on('--db-type <mongo|rethink>', 'Type of database to connect to'){ |o| options.dbtype = o }
+  opt.on('--db DATABASE', 'Database to connect to'){ |o| options.db = o.to_i }
   opt.on('-m', '--mongo-conn MONGO-CONNECTION', 'Connection string required for MongoDB in form <host:port>,<host:port>/<db>?replicaSet=<set_id>'){ |o| options.connection = o }
-  opt.on('--rethink-host HOST', 'Host for rethinkDB deployment'){ |o| options.rethinkHost = o }
+  opt.on('--host HOST', 'Host to connect to'){ |o| options.host = o }
   opt.on('--port PORT', 'Connection port'){ |o| options.port = o.to_i }
   opt.on('-a', '--auth-key AUTH-KEY', 'Auth key used for DB authentication'){ |o| options.authKey = o }
   opt.on('-u', '--user USERNAME', 'Username for DB authentication'){ |o| options.username = o }
@@ -31,7 +33,7 @@ when 'mongo'
 when 'rethink'
   include RethinkDB::Shortcuts
 
-  conn = r.connect(:host => options.rethinkHost,
+  conn = r.connect(:host => options.host,
                    :port => options.port,
                    :auth_key => options.authKey,
                    :ssl => { :ca_certs => options.cert }
@@ -39,6 +41,17 @@ when 'rethink'
 
   dbs=r.db_list().run(conn)
   print(dbs)
+when 'redis'
+  redis = Redis.new(:host => options.host,
+                    :port => options.port,
+                    :db => options.db,
+                    :password => options.password
+  )
+
+redis.set("connected", "connection was established")
+
+puts redis.get("connected")
+
 else
   puts 'Error: No database type selected use the \"--db-type\" option. Run \"MongoConnectionTester.rb -h\" for more details'
-end
+end #case options.dbtype
