@@ -2,7 +2,7 @@
 #require 'rubygems'  # if less than Ruby 1.9
 
 #require the packages needed for the application. Stored in an Array to make things a little prettier!
-packages = ['mongo','uri','json','optparse','ostruct','openssl','rethinkdb','redis']
+packages = ['mongo','uri','json','optparse','ostruct','openssl','rethinkdb','redis','elasticsearch']
 packages.each { |x| require x }
 
 #OptionParser to handle the available options.
@@ -87,6 +87,7 @@ when 'redis'
     redis.del("connected")
     puts 'Deleted successfully'
   end
+when 'elasticsearch'
 else #Prints an error if the user doesn't specify a db-type
   puts 'Error: No database type selected use the \"--db-type\" option. Run \"MongoConnectionTester.rb -h\" for more details'
 end #case options.dbtype
